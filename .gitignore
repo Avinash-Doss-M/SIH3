@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.env
+.env.local
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+build/
+.DS_Store
+.coverage
+db.sqlite3
