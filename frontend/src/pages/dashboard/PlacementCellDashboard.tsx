@@ -27,10 +27,10 @@ export default function PlacementCellDashboard() {
   }, []);
 
   const iconMap: Record<string, React.ReactNode> = {
-    'Active Students': <Users className="text-blue-400" size={24} />,
-    'Placed': <CheckCircle2 className="text-green-400" size={24} />,
-    'Avg Package': <TrendingUp className="text-purple-400" size={24} />,
-    'Upcoming Drives': <CalendarClock className="text-orange-400" size={24} />,
+    'Active Students': <Users className="text-blue-700 dark:text-blue-400" size={24} />,
+    'Placed': <CheckCircle2 className="text-emerald-700 dark:text-emerald-400" size={24} />,
+    'Avg Package': <TrendingUp className="text-indigo-700 dark:text-indigo-400" size={24} />,
+    'Upcoming Drives': <CalendarClock className="text-amber-700 dark:text-amber-400" size={24} />,
   };
 
   if (loading) {
@@ -48,14 +48,14 @@ export default function PlacementCellDashboard() {
   return (
     <div className="space-y-8 fade-in">
       {/* Header */}
-      <div className="glass-card p-6">
-        <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl animated-gradient">
-            <Building2 className="text-white" size={24} />
+      <div className="glass-card p-6 border border-slate-200/50 dark:border-slate-700/50">
+        <div className="flex items-center gap-4">
+          <div className="p-4 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 shadow-lg">
+            <Building2 className="text-white" size={28} />
           </div>
           <div>
-            <h1 className="text-2xl font-bold gradient-text-animated">Placement Cell Dashboard</h1>
-            <p className="text-sm opacity-70">Manage student placements and company relationships</p>
+            <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">Placement Cell Dashboard</h1>
+            <p className="text-lg text-slate-600 dark:text-slate-300 mt-1">Manage student placements and company relationships</p>
           </div>
         </div>
       </div>

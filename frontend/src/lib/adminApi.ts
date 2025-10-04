@@ -1,13 +1,15 @@
-import { apiFetch } from './apiClient';
+import { dataService } from './dataService';
 
 export async function fetchAdminDashboard() {
-  // Replace with your actual backend endpoint
-  const res = await apiFetch('/admin/dashboard/');
-  return await res.json();
+  return await dataService.getAdminDashboard();
 }
 
 export async function fetchAdminReports() {
-  // Replace with your actual backend endpoint
-  const res = await apiFetch('/admin/reports/');
-  return await res.json();
+  // Mock data for now - replace with actual Supabase queries
+  return {
+    reports: [
+      { title: "Monthly Placement Report", date: "2025-01-01", type: "placement", status: "Ready" },
+      { title: "User Activity Report", date: "2025-01-15", type: "activity", status: "Generating" },
+    ]
+  };
 }

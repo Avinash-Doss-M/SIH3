@@ -7,40 +7,40 @@
   color-scheme: light dark;
 }
 
-/* Light Theme - Pro Gradient Colors */
+/* Light Theme - Professional Corporate Colors */
 :root:not(.dark) {
-  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  --gradient-success: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-  --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-  --gradient-background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 25%, #d299c2 50%, #fef9d3 100%);
-  --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.6) 100%);
-  --glass-bg: rgba(255, 255, 255, 0.35);
-  --glass-border: rgba(255, 255, 255, 0.25);
-  --text-primary: #1f2937;
-  --text-secondary: #6b7280;
+  --gradient-primary: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
+  --gradient-secondary: linear-gradient(135deg, #059669 0%, #047857 100%);
+  --gradient-accent: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  --gradient-success: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  --gradient-warning: linear-gradient(135deg, #d97706 0%, #c2410c 100%);
+  --gradient-background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #f1f5f9 100%);
+  --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.8) 100%);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(15, 23, 42, 0.1);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
   --surface: 255 255 255;
   --surface-alt: 248 250 252;
-  --border: rgba(0, 0, 0, 0.1);
+  --border: rgba(15, 23, 42, 0.1);
 }
 
-/* Dark Theme - Deep Gradient Colors */
+/* Dark Theme - Professional Corporate Colors */
 .dark {
-  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  --gradient-success: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-  --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-  --gradient-background: linear-gradient(135deg, #0f0c29 0%, #302b63 25%, #24243e 50%, #1a1a2e 100%);
-  --gradient-card: linear-gradient(145deg, rgba(17, 24, 39, 0.9) 0%, rgba(17, 24, 39, 0.6) 100%);
-  --glass-bg: rgba(17, 24, 39, 0.35);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --text-primary: #f9fafb;
-  --text-secondary: #d1d5db;
-  --surface: 17 25 40;
-  --surface-alt: 30 41 59;
-  --border: rgba(255, 255, 255, 0.08);
+  --gradient-primary: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
+  --gradient-secondary: linear-gradient(135deg, #059669 0%, #047857 100%);
+  --gradient-accent: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  --gradient-success: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  --gradient-warning: linear-gradient(135deg, #d97706 0%, #c2410c 100%);
+  --gradient-background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #1e293b 100%);
+  --gradient-card: linear-gradient(145deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.8) 100%);
+  --glass-bg: rgba(30, 41, 59, 0.85);
+  --glass-border: rgba(148, 163, 184, 0.1);
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --surface: 30 41 59;
+  --surface-alt: 15 23 42;
+  --border: rgba(148, 163, 184, 0.1);
 }
 
 body {
@@ -99,21 +99,21 @@ body {
 }
 
 .gradient-text-animated {
-  background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+  background: linear-gradient(-45deg, #1e40af, #3730a3, #059669, #047857, #1e40af, #3730a3);
   background-size: 400% 400%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  animation: gradientShift 8s ease infinite;
+  animation: gradientShift 12s ease infinite;
   font-weight: 800;
 }
 
 /* Animated Backgrounds */
 .animated-gradient {
-  background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+  background: linear-gradient(-45deg, #1e40af, #3730a3, #059669, #047857, #1e40af, #3730a3);
   background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
+  animation: gradientShift 20s ease infinite;
 }
 
 @keyframes gradientShift {

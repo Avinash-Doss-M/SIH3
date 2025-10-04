@@ -8,6 +8,18 @@ import { ToastViewport } from './components/ui/Toast';
 import { ProtectedRoute } from './routes/ProtectedRoute';
 import { ThemeProvider } from './context/ThemeContext';
 import type { UserRole } from './types/auth';
+import {
+  AdminStudentsPage,
+  EmployerInsightsPage,
+  MentorMentorshipPage,
+  MentorStudentsPage,
+  PlacementApplicationsPage,
+  PlacementInsightsPage,
+  PlacementMentorshipPage,
+  PlacementStudentsPage,
+  ProfilePage,
+  StudentApplicationsPage,
+} from './pages/dashboard/FeaturePages';
 
 // Lazy load dashboards (placeholder logic)
 const StudentDashboard = lazy(() => import('./pages/dashboard/StudentDashboard'));
@@ -50,6 +62,106 @@ export default function App() {
                 }
               />
             ))}
+            <Route
+              path="/dashboard/student/applications"
+              element={
+                <ProtectedRoute roles={['student']}>
+                  <DashboardLayout>
+                    <StudentApplicationsPage />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/placement/applications"
+              element={
+                <ProtectedRoute roles={['placement']}>
+                  <DashboardLayout>
+                    <PlacementApplicationsPage />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/mentor/mentorship"
+              element={
+                <ProtectedRoute roles={['mentor']}>
+                  <DashboardLayout>
+                    <MentorMentorshipPage />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/placement/mentorship"
+              element={
+                <ProtectedRoute roles={['placement']}>
+                  <DashboardLayout>
+                    <PlacementMentorshipPage />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/mentor/students"
+              element={
+                <ProtectedRoute roles={['mentor']}>
+                  <DashboardLayout>
+                    <MentorStudentsPage />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/placement/students"
+              element={
+                <ProtectedRoute roles={['placement']}>
+                  <DashboardLayout>
+                    <PlacementStudentsPage />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/admin/students"
+              element={
+                <ProtectedRoute roles={['admin']}>
+                  <DashboardLayout>
+                    <AdminStudentsPage />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/employer/insights"
+              element={
+                <ProtectedRoute roles={['employer']}>
+                  <DashboardLayout>
+                    <EmployerInsightsPage />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/placement/insights"
+              element={
+                <ProtectedRoute roles={['placement']}>
+                  <DashboardLayout>
+                    <PlacementInsightsPage />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/profile"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <ProfilePage />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </Suspense>
         <ToastViewport />

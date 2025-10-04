@@ -1,13 +1,15 @@
-import { apiFetch } from './apiClient';
+import { dataService } from './dataService';
 
 export async function fetchMentorDashboard() {
-  // Replace with your actual backend endpoint
-  const res = await apiFetch('/mentor/dashboard/');
-  return await res.json();
+  return await dataService.getMentorDashboard();
 }
 
 export async function fetchMentorFeedback() {
-  // Replace with your actual backend endpoint
-  const res = await apiFetch('/mentor/feedback/');
-  return await res.json();
+  // Mock data for now - replace with actual Supabase queries
+  return {
+    feedback: [
+      { student: "John Doe", session: "Career Planning", rating: 4.5, date: "2025-01-15" },
+      { student: "Jane Smith", session: "Interview Prep", rating: 5.0, date: "2025-01-12" },
+    ]
+  };
 }

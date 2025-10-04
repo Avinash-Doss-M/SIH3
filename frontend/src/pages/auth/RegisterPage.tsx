@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Home } from 'lucide-react';
 import { useToast } from '../../components/ui/Toast';
 import { useAuth, getDashboardRoute } from '../../context/AuthContext';
 import type { UserRole } from '../../types/auth';
@@ -71,7 +72,16 @@ export function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 md:py-16">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 md:py-16 relative">
+      {/* Home Button */}
+      <Link 
+        to="/" 
+        className="absolute top-6 left-6 glass-card p-3 rounded-xl hover:scale-110 transition-all duration-300 group"
+        aria-label="Go to Home"
+      >
+        <Home className="text-blue-700 dark:text-blue-400 group-hover:text-blue-800 dark:group-hover:text-blue-300" size={24} />
+      </Link>
+      
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-xl mx-auto">
         <div className="mb-8 text-center space-y-2">
           <h1 className="text-3xl font-bold gradient-text">Create Account</h1>

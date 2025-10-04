@@ -9,7 +9,7 @@ import {
 } from 'react';
 import type { Session, User, AuthChangeEvent } from '@supabase/supabase-js';
 import { getSupabaseClient, SUPABASE_CONFIG_ERROR, type SupabaseClient } from '../lib/supabaseClient';
-import { apiFetch } from '../lib/apiClient';
+
 import { getDashboardRoute, isUserRole, type UserRole } from '../types/auth';
 
 interface AuthContextValue {
@@ -165,20 +165,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(newSession);
       setRole(desiredRole);
 
-      // TODO: Update endpoint to match your Django backend route for creating user profiles
-      try {
-        await apiFetch('/auth/register-profile/', {
-          method: 'POST',
-          body: JSON.stringify({
-            email,
-            first_name: firstName,
-            last_name: lastName,
-            role: desiredRole,
-          }),
-        });
-      } catch (apiError) {
-        console.warn('Profile creation needs backend endpoint configuration:', apiError);
-      }
+      // Profile creation is handled by Supabase triggers/functions
+      console.log('User profile created with role:', desiredRole);
     }
 
     return {
@@ -228,16 +216,8 @@ async function resolveRole(user: User, session: Session, options?: { forceBacken
     return fallbackRole;
   }
 
-  try {
-    // TODO: Point to your Django endpoint that returns the role for the current user
-    const response = await apiFetch('/auth/me/');
-    const payload = await response.json();
-    if (isUserRole(payload?.role)) {
-      return payload.role;
-    }
-  } catch (error) {
-    console.warn('Role lookup requires backend endpoint to be configured:', error);
-  }
+  // Role is determined from Supabase user metadata only
+  console.log('Using fallback role from Supabase metadata:', fallbackRole);
 
   return fallbackRole;
 }

@@ -11,13 +11,14 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
+    "@supabase/supabase-js": "^2.46.1",
+    "@vercel/speed-insights": "^1.2.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.22",
     "lucide-react": "^0.544.0",
-    "react-router-dom": "^7.0.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "@supabase/supabase-js": "^2.46.1",
+    "react-router-dom": "^7.0.2",
     "tailwindcss": "^4.1.14"
   },
   "devDependencies": {

@@ -1,19 +1,25 @@
-import { apiFetch } from './apiClient';
+import { dataService } from './dataService';
 
 export async function fetchStudentDashboard() {
-  // Replace with your actual backend endpoint
-  const res = await apiFetch('/student/dashboard/');
-  return await res.json();
+  return await dataService.getStudentDashboard();
 }
 
 export async function fetchStudentApplications() {
-  // Replace with your actual backend endpoint
-  const res = await apiFetch('/student/applications/');
-  return await res.json();
+  // Mock data for now - replace with actual Supabase queries
+  return {
+    applications: [
+      { company: "TechCorp", position: "Software Engineer", status: "Pending", date: "2025-01-15" },
+      { company: "DataWorks", position: "Data Analyst", status: "Shortlisted", date: "2025-01-10" },
+    ]
+  };
 }
 
 export async function fetchStudentReminders() {
-  // Replace with your actual backend endpoint
-  const res = await apiFetch('/student/reminders/');
-  return await res.json();
+  // Mock data for now - replace with actual Supabase queries
+  return {
+    reminders: [
+      { title: "Interview with TechCorp", date: "2025-01-20", type: "interview" },
+      { title: "Submit documents to DataWorks", date: "2025-01-18", type: "document" },
+    ]
+  };
 }

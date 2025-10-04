@@ -1,13 +1,9 @@
-import { apiFetch } from './apiClient';
+import { dataService } from './dataService';
 
 export async function fetchPlacementDashboard() {
-  // Replace with your actual backend endpoint
-  const res = await apiFetch('/placement/dashboard/');
-  return await res.json();
+  return await dataService.getPlacementDashboard();
 }
 
 export async function fetchPlacementDrives() {
-  // Replace with your actual backend endpoint
-  const res = await apiFetch('/placement/drives/');
-  return await res.json();
+  return await dataService.getPlacementDrives();
 }

@@ -49,7 +49,12 @@ export function TopBar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
         
         <div className="h-6 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent" />
         
-        <div className="flex items-center gap-3 glass px-3 py-1 rounded-xl">
+        <button
+          type="button"
+          onClick={() => navigate('/dashboard/profile')}
+          className="flex items-center gap-3 glass px-3 py-1 rounded-xl hover:scale-105 transition-all duration-300"
+          aria-label="Open profile"
+        >
           <div className="h-8 w-8 rounded-full animated-gradient flex items-center justify-center text-xs font-bold text-white shadow-lg">
             {initials || 'U'}
           </div>
@@ -57,7 +62,7 @@ export function TopBar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
             <div className="text-xs font-medium truncate max-w-[120px]">{user?.email ?? 'Signed out'}</div>
             {role && <div className="text-[10px] opacity-60">{USER_ROLE_LABELS[role]}</div>}
           </div>
-        </div>
+        </button>
         
         <button 
           onClick={handleLogout} 

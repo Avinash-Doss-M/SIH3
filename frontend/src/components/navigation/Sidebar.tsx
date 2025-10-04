@@ -2,14 +2,50 @@ import { User, Briefcase, GraduationCap, LayoutDashboard, Menu, Users } from 'lu
 import { NavLink } from 'react-router-dom';
 import type { SidebarLink } from './types';
 import type { UserRole } from '../../types/auth';
+import { getDashboardRoute } from '../../types/auth';
 
 const links: SidebarLink[] = [
-  { label: 'Overview', icon: LayoutDashboard, to: '/dashboard/student', roles: ['student', 'mentor', 'employer', 'placement', 'admin'] },
-  { label: 'Applications', icon: Briefcase, to: '/dashboard/student', roles: ['student', 'placement'] },
-  { label: 'Mentorship', icon: Users, to: '/dashboard/mentor', roles: ['mentor', 'placement'] },
-  { label: 'Students', icon: GraduationCap, to: '/dashboard/placement', roles: ['mentor', 'placement', 'admin'] },
-  { label: 'Company Insights', icon: Briefcase, to: '/dashboard/employer', roles: ['employer', 'placement'] },
-  { label: 'Profile', icon: User, to: '/dashboard/student', roles: ['student', 'mentor', 'employer', 'placement', 'admin'] },
+  {
+    label: 'Overview',
+    icon: LayoutDashboard,
+    to: (role: UserRole) => getDashboardRoute(role),
+    roles: ['student', 'mentor', 'employer', 'placement', 'admin'],
+    exact: true,
+  },
+  {
+    label: 'Applications',
+    icon: Briefcase,
+    to: (role: UserRole) => (role === 'student' ? '/dashboard/student/applications' : '/dashboard/placement/applications'),
+    roles: ['student', 'placement'],
+  },
+  {
+    label: 'Mentorship',
+    icon: Users,
+    to: (role: UserRole) => (role === 'mentor' ? '/dashboard/mentor/mentorship' : '/dashboard/placement/mentorship'),
+    roles: ['mentor', 'placement'],
+  },
+  {
+    label: 'Students',
+    icon: GraduationCap,
+    to: (role: UserRole) => {
+      if (role === 'mentor') return '/dashboard/mentor/students';
+      if (role === 'placement') return '/dashboard/placement/students';
+      return '/dashboard/admin/students';
+    },
+    roles: ['mentor', 'placement', 'admin'],
+  },
+  {
+    label: 'Company Insights',
+    icon: Briefcase,
+    to: (role: UserRole) => (role === 'employer' ? '/dashboard/employer/insights' : '/dashboard/placement/insights'),
+    roles: ['employer', 'placement'],
+  },
+  {
+    label: 'Profile',
+    icon: User,
+    to: '/dashboard/profile',
+    roles: ['student', 'mentor', 'employer', 'placement', 'admin'],
+  },
 ];
 
 export function Sidebar({ collapsed, onToggle, role }: { collapsed: boolean; onToggle: () => void; role: UserRole | null }) {
@@ -34,10 +70,13 @@ export function Sidebar({ collapsed, onToggle, role }: { collapsed: boolean; onT
       
       <nav className="flex-1 py-6 overflow-y-auto">
         <ul className="px-4 space-y-2">
-          {filteredLinks.map((item, index) => (
+          {filteredLinks.map((item, index) => {
+            const path = typeof item.to === 'function' ? item.to(effectiveRole) : item.to;
+            return (
             <li key={item.label} className="fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
               <NavLink
-                to={item.to}
+                to={path}
+                end={item.exact ?? false}
                 className={({ isActive }) =>
                   `flex items-center gap-4 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 group/item relative overflow-hidden ${
                     isActive 
@@ -65,7 +104,7 @@ export function Sidebar({ collapsed, onToggle, role }: { collapsed: boolean; onT
                 )}
               </NavLink>
             </li>
-          ))}
+          );})}
         </ul>
       </nav>
       
