@@ -1,98 +1,85 @@
-import { useEffect, useState } from "react";
-import AppShell from "@components/layout/AppShell";
-import ApplicationChart from "@components/charts/ApplicationChart";
-import StudentProfileForm from "@forms/StudentProfileForm";
-import { supabase } from "@lib/supabaseClient";
-import { InternshipPosting, ApplicationStats } from "@types/index";
 
-const StudentDashboard = () => {
-  const [internships, setInternships] = useState<InternshipPosting[]>([]);
-  const [stats, setStats] = useState<ApplicationStats[]>([]);
+import { useEffect, useState } from 'react';
+import { fetchStudentDashboard, fetchStudentApplications, fetchStudentReminders } from '../../lib/studentApi';
+import { Briefcase, TrendingUp, CheckCircle2, Clock } from 'lucide-react';
+import { StatCard } from '../../components/ui/StatCard';
+import { GlassCard } from '../../components/ui/GlassCard';
+
+export default function StudentDashboard() {
+  const [stats, setStats] = useState<any[]>([]);
+  const [applications, setApplications] = useState<any[]>([]);
+  const [reminders, setReminders] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const { data: internshipData } = await supabase
-        .from("internships_view")
-        .select("*")
-        .limit(10);
-      setInternships((internshipData ?? []) as InternshipPosting[]);
-
-      // TODO: Replace demo data with analytics endpoint call.
-      setStats([
-        { label: "This Month", applied: 5, interviews: 3, offers: 1, conversions: 1 },
-        { label: "Last Month", applied: 8, interviews: 4, offers: 2, conversions: 1 }
-      ]);
-    };
-
-    fetchData();
-
-    const subscription = supabase
-      .channel("internship-feed")
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "internships" },
-        (payload) => {
-          setInternships((prev) => [payload.new as InternshipPosting, ...prev]);
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(subscription);
-    };
+    async function load() {
+      setLoading(true);
+      setError(null);
+      try {
+        const statsData = await fetchStudentDashboard();
+        setStats(statsData.stats || []);
+        const appsData = await fetchStudentApplications();
+        setApplications(appsData.applications || []);
+        const remindersData = await fetchStudentReminders();
+        setReminders(remindersData.reminders || []);
+      } catch (e: any) {
+        setError(e.message || 'Failed to load dashboard data');
+      }
+      setLoading(false);
+    }
+    load();
   }, []);
 
+  // fallback icons for stats
+  const iconMap: Record<string, React.ReactNode> = {
+    Applications: <Briefcase size={18} />,
+    Interviews: <Clock size={18} />,
+    Offers: <CheckCircle2 size={18} />,
+    'Profile Score': <TrendingUp size={18} />,
+  };
+
   return (
-    <AppShell title="Student Dashboard">
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <div className="xl:col-span-2 space-y-6">
-          <section className="bg-white p-6 rounded shadow">
-            <h2 className="text-lg font-semibold mb-4">Application Analytics</h2>
-            <ApplicationChart stats={stats} />
-          </section>
-
-          <section className="bg-white p-6 rounded shadow">
-            <h2 className="text-lg font-semibold mb-4">Recommended Internships</h2>
-            <div className="space-y-4 max-h-80 overflow-y-auto">
-              {internships.map((internship) => (
-                <article key={internship.id} className="border rounded p-4">
-                  <h3 className="font-medium text-primary-dark">{internship.title}</h3>
-                  <p className="text-sm text-gray-600">
-                    Department: {internship.department} • Stipend: ₹{internship.stipend}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Conversion Chance: {internship.conversion_chance}%
-                  </p>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {internship.tags.map((tag) => (
-                      <span key={tag} className="px-2 py-1 text-xs rounded bg-primary/10 text-primary-dark">
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                  <button className="mt-3 px-3 py-1 rounded bg-primary text-white text-sm hover:bg-primary-dark">
-                    Apply
-                  </button>
-                </article>
-              ))}
-            </div>
-          </section>
-        </div>
-        <div className="space-y-6">
-          <StudentProfileForm />
-          <section className="bg-white p-6 rounded shadow">
-            <h2 className="text-lg font-semibold mb-2">AI Career Assistant</h2>
-            <p className="text-sm text-gray-600">
-              TODO: Integrate ChatterBot chatbot via backend `/api/chatbot/respond/`.
-            </p>
-            <button className="mt-3 px-3 py-2 rounded border border-primary text-primary hover:bg-primary/10">
-              Open Chatbot
-            </button>
-          </section>
-        </div>
-      </div>
-    </AppShell>
+    <div className="space-y-8">
+      {error && <div className="text-xs text-rose-400 bg-rose-500/10 border border-rose-500/30 rounded-md px-3 py-2">{error}</div>}
+      <section className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        {stats.map(s => (
+          <StatCard key={s.label} {...s} icon={iconMap[s.label] || <Briefcase size={18} />} />
+        ))}
+      </section>
+      <section className="grid gap-6 lg:grid-cols-3">
+        <GlassCard className="lg:col-span-2">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-semibold tracking-wide text-slate-300">Recent Applications</h2>
+            <button className="text-xs text-blue-400 hover:text-blue-300">View all</button>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="data-table min-w-full">
+              <thead><tr><th>Role</th><th>Status</th><th className="hidden md:table-cell">Company</th><th className="hidden md:table-cell">Updated</th></tr></thead>
+              <tbody className="align-top">
+                {applications.map(app => (
+                  <tr key={app.id}>
+                    <td>{app.role}</td>
+                    <td><span className="text-xs font-medium" style={{ color: app.statusColor }}>{app.status}</span></td>
+                    <td className="hidden md:table-cell">{app.company}</td>
+                    <td className="hidden md:table-cell">{app.updated}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-4 text-[10px] text-slate-500">{loading ? 'Loading...' : applications.length === 0 ? 'No applications found.' : ''}</div>
+        </GlassCard>
+        <GlassCard>
+          <h2 className="text-sm font-semibold tracking-wide text-slate-300 mb-4">Upcoming Deadlines</h2>
+          <ul className="space-y-3 text-sm">
+            {reminders.map((r, i) => (
+              <li key={i} className="flex items-center justify-between"><span className="text-slate-300">{r.title}</span><span className="text-xs text-slate-500">{r.date}</span></li>
+            ))}
+          </ul>
+          <div className="mt-4 text-[10px] text-slate-500">{loading ? 'Loading...' : reminders.length === 0 ? 'No reminders.' : ''}</div>
+        </GlassCard>
+      </section>
+    </div>
   );
-};
-
-export default StudentDashboard;
+}

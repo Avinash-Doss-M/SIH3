@@ -1,13 +1,13 @@
 
 import { useEffect, useState } from 'react';
-import { fetchMentorDashboard, fetchMentorFeedback } from '../../lib/mentorApi';
-import { Users, CheckCircle2, MessageSquare, BarChart3 } from 'lucide-react';
+import { fetchAdminDashboard, fetchAdminReports } from '../../lib/adminApi';
+import { Users, Briefcase, TrendingUp, ShieldCheck } from 'lucide-react';
 import { StatCard } from '../../components/ui/StatCard';
 import { GlassCard } from '../../components/ui/GlassCard';
 
-export default function MentorDashboard() {
+export default function AdminDashboard() {
   const [stats, setStats] = useState<any[]>([]);
-  const [feedback, setFeedback] = useState<any[]>([]);
+  const [reports, setReports] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -16,10 +16,10 @@ export default function MentorDashboard() {
       setLoading(true);
       setError(null);
       try {
-        const statsData = await fetchMentorDashboard();
+        const statsData = await fetchAdminDashboard();
         setStats(statsData.stats || []);
-        const feedbackData = await fetchMentorFeedback();
-        setFeedback(feedbackData.feedback || []);
+        const reportsData = await fetchAdminReports();
+        setReports(reportsData.reports || []);
       } catch (e: any) {
         setError(e.message || 'Failed to load dashboard data');
       }
@@ -29,10 +29,10 @@ export default function MentorDashboard() {
   }, []);
 
   const iconMap: Record<string, React.ReactNode> = {
-    'Assigned Students': <Users size={18} />,
-    'Active Sessions': <MessageSquare size={18} />,
-    'Reviews Completed': <CheckCircle2 size={18} />,
-    'Avg Progress': <BarChart3 size={18} />,
+    'Total Users': <Users size={18} />,
+    'Active Employers': <Briefcase size={18} />,
+    'System Health': <ShieldCheck size={18} />,
+    'Reports': <TrendingUp size={18} />,
   };
 
   return (
@@ -43,18 +43,18 @@ export default function MentorDashboard() {
       </section>
       <section className="grid gap-6 lg:grid-cols-3">
         <GlassCard className="lg:col-span-2">
-          <div className="flex items-center justify-between mb-4"><h2 className="text-sm font-semibold tracking-wide text-slate-300">Student Progress Overview</h2><button className="text-xs text-blue-400 hover:text-blue-300">Export</button></div>
-          <div className="h-56 flex items-center justify-center text-slate-500 text-sm">Chart Placeholder (TODO: Recharts)</div>
+          <div className="flex items-center justify-between mb-4"><h2 className="text-sm font-semibold tracking-wide text-slate-300">System Overview</h2></div>
+          <div className="h-56 flex items-center justify-center text-slate-500 text-sm">Admin analytics and controls will appear here.</div>
           <div className="mt-4 text-[10px] text-slate-500">{loading ? 'Loading...' : ''}</div>
         </GlassCard>
         <GlassCard>
-          <h2 className="text-sm font-semibold tracking-wide text-slate-300 mb-4">Recent Feedback</h2>
+          <h2 className="text-sm font-semibold tracking-wide text-slate-300 mb-4">Recent Reports</h2>
           <ul className="space-y-3 text-xs text-slate-300/90">
-            {feedback.map((f, i) => (
-              <li key={i} className="border-b border-white/5 pb-2">{f.text}</li>
+            {reports.map((r, i) => (
+              <li key={i} className="border-b border-white/5 pb-2">{r.title} – {r.date}</li>
             ))}
           </ul>
-          <div className="mt-4 text-[10px] text-slate-500">{loading ? 'Loading...' : feedback.length === 0 ? 'No feedback.' : ''}</div>
+          <div className="mt-4 text-[10px] text-slate-500">{loading ? 'Loading...' : reports.length === 0 ? 'No reports.' : ''}</div>
         </GlassCard>
       </section>
     </div>

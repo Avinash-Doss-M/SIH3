@@ -1,25 +1,40 @@
-import { ReactNode } from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "@context/AuthContext";
+import { Navigate, useLocation } from 'react-router-dom';
+import { useEffect, useState, type ReactNode } from 'react';
+import { useAuth, getDashboardRoute } from '../context/AuthContext';
+import type { UserRole } from '../types/auth';
 
 interface ProtectedRouteProps {
   children: ReactNode;
-  allowedRoles?: string[];
+  roles?: UserRole[];
 }
 
-const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
-  const { session, profile } = useAuth();
+export function ProtectedRoute({ children, roles }: ProtectedRouteProps) {
+  const { session, role, initializing, refreshRole } = useAuth();
   const location = useLocation();
+  const [checkingRole, setCheckingRole] = useState(false);
 
-  if (!session) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+  useEffect(() => {
+    if (!initializing && session && !role && !checkingRole) {
+      setCheckingRole(true);
+      refreshRole().finally(() => setCheckingRole(false));
+    }
+  }, [initializing, session, role, checkingRole, refreshRole]);
+
+  if (initializing || checkingRole) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-slate-400 text-sm">
+        Checking your session...
+      </div>
+    );
   }
 
-  if (allowedRoles && profile && !allowedRoles.includes(profile.role)) {
-    return <Navigate to="/dashboard" replace />;
+  if (!session) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
+  }
+
+  if (roles && role && !roles.includes(role)) {
+    return <Navigate to={getDashboardRoute(role)} replace />;
   }
 
   return <>{children}</>;
-};
-
-export default ProtectedRoute;
+}
