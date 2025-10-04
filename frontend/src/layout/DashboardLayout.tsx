@@ -12,8 +12,11 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(c => !c)} role={role} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <TopBar onToggleSidebar={() => setCollapsed(c => !c)} />
-        <main className="flex-1 overflow-y-auto p-6 md:p-8 space-y-6 fade-in">
-          {children}
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 space-y-8 relative">
+          <div className="absolute inset-0 animated-gradient opacity-5 pointer-events-none"></div>
+          <div className="relative z-10 fade-in">
+            {children}
+          </div>
         </main>
       </div>
     </div>

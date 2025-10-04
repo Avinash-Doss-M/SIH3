@@ -6,6 +6,7 @@ import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
 import { ToastViewport } from './components/ui/Toast';
 import { ProtectedRoute } from './routes/ProtectedRoute';
+import { ThemeProvider } from './context/ThemeContext';
 import type { UserRole } from './types/auth';
 
 // Lazy load dashboards (placeholder logic)
@@ -25,33 +26,35 @@ const roleRoutes: Record<UserRole, string> = {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Suspense fallback={<div className="p-10 text-center text-slate-300">Loading...</div>}>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          {Object.entries(roleRoutes).map(([role, path]) => (
-            <Route
-              key={role}
-              path={path}
-              element={
-                <ProtectedRoute roles={[role as UserRole]}>
-                  <DashboardLayout>
-                    {role === 'student' && <StudentDashboard />}
-                    {role === 'mentor' && <MentorDashboard />}
-                    {role === 'employer' && <EmployerDashboard />}
-                    {role === 'placement' && <PlacementDashboard />}
-                    {role === 'admin' && <AdminDashboard />}
-                  </DashboardLayout>
-                </ProtectedRoute>
-              }
-            />
-          ))}
-        </Routes>
-      </Suspense>
-      <ToastViewport />
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Suspense fallback={<div className="loading-shimmer p-10 text-center glass-card">Loading...</div>}>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            {Object.entries(roleRoutes).map(([role, path]) => (
+              <Route
+                key={role}
+                path={path}
+                element={
+                  <ProtectedRoute roles={[role as UserRole]}>
+                    <DashboardLayout>
+                      {role === 'student' && <StudentDashboard />}
+                      {role === 'mentor' && <MentorDashboard />}
+                      {role === 'employer' && <EmployerDashboard />}
+                      {role === 'placement' && <PlacementDashboard />}
+                      {role === 'admin' && <AdminDashboard />}
+                    </DashboardLayout>
+                  </ProtectedRoute>
+                }
+              />
+            ))}
+          </Routes>
+        </Suspense>
+        <ToastViewport />
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

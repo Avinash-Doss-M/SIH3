@@ -17,35 +17,68 @@ export function Sidebar({ collapsed, onToggle, role }: { collapsed: boolean; onT
   const filteredLinks = links.filter(link => link.roles.includes(effectiveRole));
 
   return (
-    <aside className={`relative group transition-all duration-300 ${collapsed ? 'w-16' : 'w-64'} hidden md:flex flex-col border-r border-white/10 bg-gradient-to-b from-slate-950/80 to-slate-900/60 backdrop-blur-xl`}>
-      <div className="flex items-center h-16 px-4 border-b border-white/5">
-        <button onClick={onToggle} className="btn-outline h-8 w-8 p-0 flex items-center justify-center text-slate-300">
+    <aside className={`relative group transition-all duration-500 ${collapsed ? 'w-16' : 'w-72'} hidden md:flex flex-col glass-card border-r-0 rounded-r-3xl rounded-l-none m-4 mr-0`}>
+      <div className="flex items-center h-16 px-6 border-b border-white/10">
+        <button 
+          onClick={onToggle} 
+          className="glass p-2 rounded-xl hover:scale-110 transition-all duration-300"
+        >
           <Menu size={18} />
         </button>
-        {!collapsed && <span className="ml-3 font-semibold tracking-wide gradient-text">Campus Portal</span>}
+        {!collapsed && (
+          <span className="ml-4 font-bold text-lg gradient-text-animated">
+            Campus Portal
+          </span>
+        )}
       </div>
-      <nav className="flex-1 py-4 overflow-y-auto">
-        <ul className="px-2 space-y-1">
-          {filteredLinks.map(item => (
-            <li key={item.label}>
+      
+      <nav className="flex-1 py-6 overflow-y-auto">
+        <ul className="px-4 space-y-2">
+          {filteredLinks.map((item, index) => (
+            <li key={item.label} className="fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
               <NavLink
                 to={item.to}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors group/item ${
-                    isActive ? 'bg-white/10 text-white' : 'text-slate-300 hover:text-white hover:bg-white/5'
+                  `flex items-center gap-4 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 group/item relative overflow-hidden ${
+                    isActive 
+                      ? 'glass-card text-white shadow-lg' 
+                      : 'hover:glass-card hover:scale-105 hover:shadow-md'
                   }`
                 }
               >
-                <item.icon size={18} className="opacity-80 group-hover/item:opacity-100" />
-                {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
+                {({ isActive }) => (
+                  <>
+                    {isActive && (
+                      <div className="absolute inset-0 animated-gradient opacity-20"></div>
+                    )}
+                    <div className="relative z-10 flex items-center gap-4">
+                      <div className={`p-2 rounded-lg transition-all duration-300 ${
+                        isActive ? 'glass text-white' : 'opacity-70 group-hover/item:opacity-100'
+                      }`}>
+                        <item.icon size={20} />
+                      </div>
+                      {!collapsed && (
+                        <span className="font-medium">{item.label}</span>
+                      )}
+                    </div>
+                  </>
+                )}
               </NavLink>
             </li>
           ))}
         </ul>
       </nav>
-      <div className="p-4 border-t border-white/5 text-xs text-slate-500">
-        {!collapsed && (
-          <>Role: <span className="text-slate-300 capitalize">{effectiveRole}</span></>
+      
+      <div className="p-6 border-t border-white/10">
+        {!collapsed ? (
+          <div className="glass p-4 rounded-xl text-center">
+            <div className="text-xs opacity-60 mb-1">Current Role</div>
+            <div className="text-sm font-medium gradient-text capitalize">{effectiveRole}</div>
+          </div>
+        ) : (
+          <div className="w-8 h-8 mx-auto glass rounded-lg flex items-center justify-center">
+            <User size={16} />
+          </div>
         )}
       </div>
     </aside>
